@@ -11,6 +11,10 @@ module OpenAI
     def completions(parameters: {})
       OpenAI::Client.json_post(path: "/completions", parameters: parameters)
     end
+    
+    def chat_completions(parameters: {})
+      OpenAI::Client.json_post(path: "/chat/completions", parameters: parameters)
+    end
 
     def edits(parameters: {})
       OpenAI::Client.json_post(path: "/edits", parameters: parameters)
