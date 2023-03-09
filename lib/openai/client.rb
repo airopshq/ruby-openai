@@ -8,6 +8,10 @@ module OpenAI
       OpenAI.configuration.request_timeout = request_timeout if request_timeout
     end
 
+    def chat(parameters: {})
+      OpenAI::Client.json_post(path: "/chat/completions", parameters: parameters)
+    end
+
     def completions(parameters: {})
       OpenAI::Client.json_post(path: "/completions", parameters: parameters)
     end
@@ -38,6 +42,14 @@ module OpenAI
 
     def moderations(parameters: {})
       OpenAI::Client.json_post(path: "/moderations", parameters: parameters)
+    end
+
+    def transcribe(parameters: {})
+      OpenAI::Client.multipart_post(path: "/audio/transcriptions", parameters: parameters)
+    end
+
+    def translate(parameters: {})
+      OpenAI::Client.multipart_post(path: "/audio/translations", parameters: parameters)
     end
 
     def self.get(path:)
