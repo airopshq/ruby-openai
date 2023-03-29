@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.7.0] - 2023-03-25
+
+### Added
+
+- Allow the usage of proxy base URIs like https://www.helicone.ai/. Thanks to [@mmmaia](https://github.com/mmmaia) for the PR!
+
+## [3.6.0] - 2023-03-22
+
+### Added
+
+- Add much-needed ability to increase HTTParty timeout, and set default to 120 seconds. Thanks to [@mbackermann](https://github.com/mbackermann) for the PR and to everyone who requested this!
+
+## [3.5.0] - 2023-03-02
+
+### Added
+
+- Add Client#transcribe and Client translate endpoints - Whisper over the wire! Thanks to [@Clemalfroy](https://github.com/Clemalfroy)
+
+## [3.4.0] - 2023-03-01
+
+### Added
+
+- Add Client#chat endpoint - ChatGPT over the wire!
+
 ## [3.3.0] - 2023-02-15
 
 ### Changed

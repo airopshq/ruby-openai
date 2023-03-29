@@ -7,6 +7,8 @@ RSpec.describe OpenAI do
     let(:access_token) { "abc123" }
     let(:api_version) { "v2" }
     let(:organization_id) { "def456" }
+    let(:custom_uri_base) { "ghi789" }
+    let(:custom_request_timeout) { 25 }
 
     before do
       OpenAI.configure do |config|
@@ -20,6 +22,8 @@ RSpec.describe OpenAI do
       expect(OpenAI.configuration.access_token).to eq(access_token)
       expect(OpenAI.configuration.api_version).to eq(api_version)
       expect(OpenAI.configuration.organization_id).to eq(organization_id)
+      expect(OpenAI.configuration.uri_base).to eq("https://api.openai.com/")
+      expect(OpenAI.configuration.request_timeout).to eq(120)
     end
 
     context "without an access token" do
@@ -27,6 +31,23 @@ RSpec.describe OpenAI do
 
       it "raises an error" do
         expect { OpenAI::Client.new.completions }.to raise_error(OpenAI::ConfigurationError)
+      end
+    end
+
+    context "with custom timeout and uri base" do
+      before do
+        OpenAI.configure do |config|
+          config.uri_base = custom_uri_base
+          config.request_timeout = custom_request_timeout
+        end
+      end
+
+      it "returns the config" do
+        expect(OpenAI.configuration.access_token).to eq(access_token)
+        expect(OpenAI.configuration.api_version).to eq(api_version)
+        expect(OpenAI.configuration.organization_id).to eq(organization_id)
+        expect(OpenAI.configuration.uri_base).to eq(custom_uri_base)
+        expect(OpenAI.configuration.request_timeout).to eq(custom_request_timeout)
       end
     end
   end
