@@ -1,3 +1,4 @@
+
 module OpenAI
   class Client
     def initialize(access_token: nil, organization_id: nil, uri_base: nil, request_timeout: nil)
@@ -7,12 +8,12 @@ module OpenAI
       OpenAI.configuration.request_timeout = request_timeout if request_timeout
     end
 
-    def chat(parameters: {})
-      OpenAI::Client.json_post(path: "/chat/completions", parameters: parameters)
+    def chat(parameters: {}, &block)
+      OpenAI::Client.json_post(path: "/chat/completions", parameters: parameters, &block)
     end
 
-    def completions(parameters: {})
-      OpenAI::Client.json_post(path: "/completions", parameters: parameters)
+    def completions(parameters: {}, &block)
+      OpenAI::Client.json_post(path: "/completions", parameters: parameters, &block)
     end
 
     def edits(parameters: {})
@@ -59,12 +60,15 @@ module OpenAI
       )
     end
 
-    def self.json_post(path:, parameters:)
-      Typhoeus.post(
+    def self.json_post(path:, parameters:, &block)
+      typhoeus(
         uri(path: path),
+        method: :post,
         headers: headers,
         body: parameters&.to_json,
-        timeout: request_timeout
+        timeout: request_timeout,
+        stream: parameters&.dig(:stream),
+        &block
       )
     end
 
@@ -99,6 +103,34 @@ module OpenAI
 
     private_class_method def self.request_timeout
       OpenAI.configuration.request_timeout
+    end
+
+    # private_class_method def self.typhoeus_stream(path:)
+    #   request = Typhoeus::Request.new(uri(path: path), :method => :post)
+    #
+    #   request.on_body do |chunk|
+    #     yield(chunk)
+    #   end
+    #
+    #   request.on_complete do |response|
+    #     yield(response)
+    #   end
+    #
+    #   request.run
+    # end
+
+    private_class_method def self.typhoeus(uri, method:, headers:, body:, timeout:, stream: false, &block)
+      request =  Typhoeus::Request.new(uri, method:, body:, headers:, timeout:)
+
+      if stream
+        raise "Block required for streaming" unless block_given?
+
+        request.on_body do |chunk|
+          block.call(chunk)
+        end
+      end
+
+      request.run
     end
   end
 end
