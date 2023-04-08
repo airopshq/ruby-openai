@@ -1,5 +1,4 @@
 require "faraday"
-require "faraday/typhoeus"
 
 require_relative "openai/client"
 require_relative "openai/files"

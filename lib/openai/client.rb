@@ -82,9 +82,7 @@ module OpenAI
     end
 
     private_class_method def self.conn
-      Faraday.new(params: nil) do |f|
-        f.adapter :typhoeus
-      end
+      Faraday.new(params: nil)
     end
 
     private_class_method def self.uri(path:)
