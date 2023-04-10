@@ -52,13 +52,13 @@ module OpenAI
     end
 
     def self.get(path:)
-      conn.get(uri(path: path), timeout: OpenAI.configuration.request_timeout) do |req|
+      conn.get(uri(path: path)) do |req|
         req.headers = headers
       end
     end
 
     def self.json_post(path:, parameters:)
-      conn.post(uri(path: path), timeout: OpenAI.configuration.request_timeout) do |req|
+      conn.post(uri(path: path)) do |req|
         req.headers = headers
         if parameters[:stream] && parameters[:on_data].is_a?(Proc)
           req.options.on_data = parameters[:on_data]
@@ -69,20 +69,20 @@ module OpenAI
     end
 
     def self.multipart_post(path:, parameters: nil)
-      conn.post(uri(path: path), timeout: OpenAI.configuration.request_timeout) do |req|
+      conn.post(uri(path: path)) do |req|
         req.body = parameters
         req.headers = headers.merge({ "Content-Type" => "multipart/form-data" })
       end
     end
 
     def self.delete(path:)
-      conn.delete(uri(path: path), timeout: OpenAI.configuration.request_timeout) do |req|
+      conn.delete(uri(path: path)) do |req|
         req.headers = headers
       end
     end
 
     private_class_method def self.conn
-      Faraday.new(params: nil)
+      Faraday.new(params: nil, request: { timeout: OpenAI.configuration.request_timeout })
     end
 
     private_class_method def self.uri(path:)
