@@ -26,19 +26,19 @@ module OpenAI
     end
 
     def files
-      @files ||= OpenAI::Files.new
+      @files ||= OpenAI::Files.new(client: self)
     end
 
     def finetunes
-      @finetunes ||= OpenAI::Finetunes.new
+      @finetunes ||= OpenAI::Finetunes.new(client: self)
     end
 
     def images
-      @images ||= OpenAI::Images.new
+      @images ||= OpenAI::Images.new(client: self)
     end
 
     def models
-      @models ||= OpenAI::Models.new
+      @models ||= OpenAI::Models.new(client: self)
     end
 
     def moderations(parameters: {})
