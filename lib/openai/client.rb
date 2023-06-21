@@ -86,7 +86,9 @@ module OpenAI
     private
 
     def conn
-      @conn ||= Faraday.new(params: nil, request: { timeout: request_timeout })
+      @conn ||= Faraday.new(params: nil, request: { timeout: request_timeout }) do |connection|
+        connection.response :raise_error
+      end
     end
 
     def uri(path:)
