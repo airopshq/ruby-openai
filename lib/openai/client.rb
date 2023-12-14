@@ -2,11 +2,16 @@ module OpenAI
   class Client
     attr_reader :access_token, :organization_id, :uri_base, :request_timeout
 
-    def initialize(access_token: nil, organization_id: nil, uri_base: nil, request_timeout: nil)
+    def initialize(
+      access_token: nil, organization_id: nil, uri_base: nil,
+      request_timeout: nil, api_type: nil, api_version: nil
+    )
       @access_token = access_token || OpenAI.configuration.access_token
       @organization_id = organization_id || OpenAI.configuration.organization_id
       @uri_base = uri_base || OpenAI.configuration.uri_base
       @request_timeout = request_timeout || OpenAI.configuration.request_timeout
+      @api_type = api_type
+      @api_version = api_version || OpenAI.configuration.api_version
     end
 
     def chat(parameters: {})
@@ -92,15 +97,39 @@ module OpenAI
     end
 
     def uri(path:)
-      uri_base + OpenAI.configuration.api_version + path
+      if azure?
+        base = File.join(@uri_base, path)
+        "#{base}?api-version=#{@api_version}"
+      else
+        File.join(@uri_base, @api_version, path)
+      end
     end
 
     def headers
-      @headers ||= {
+      if azure?
+        azure_headers
+      else
+        openai_headers
+      end
+    end
+
+    def openai_headers
+      {
         "Content-Type" => "application/json",
-        "Authorization" => "Bearer #{access_token}",
-        "OpenAI-Organization" => organization_id
+        "Authorization" => "Bearer #{@access_token}",
+        "OpenAI-Organization" => @organization_id
       }
+    end
+
+    def azure_headers
+      {
+        "Content-Type" => "application/json",
+        "api-key" => @access_token
+      }
+    end
+
+    def azure?
+      @api_type&.to_sym == :azure
     end
   end
 end
