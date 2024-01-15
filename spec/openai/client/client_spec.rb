@@ -12,7 +12,7 @@ RSpec.describe OpenAI::Client do
       ).and_call_original
       expect_any_instance_of(Faraday::Connection).to receive(:get)
 
-      OpenAI::Client.get(path: "/abc")
+      OpenAI::Client.new.get(path: "/abc")
     end
   end
 
@@ -23,7 +23,7 @@ RSpec.describe OpenAI::Client do
       ).and_call_original
       expect_any_instance_of(Faraday::Connection).to receive(:post)
 
-      OpenAI::Client.json_post(path: "/abc", parameters: { foo: :bar })
+      OpenAI::Client.new.json_post(path: "/abc", parameters: { foo: :bar })
     end
   end
 
@@ -34,7 +34,7 @@ RSpec.describe OpenAI::Client do
       ).and_call_original
       expect_any_instance_of(Faraday::Connection).to receive(:post)
 
-      OpenAI::Client.multipart_post(path: "/abc")
+      OpenAI::Client.new.multipart_post(path: "/abc")
     end
   end
 
@@ -45,7 +45,21 @@ RSpec.describe OpenAI::Client do
       ).and_call_original
       expect_any_instance_of(Faraday::Connection).to receive(:delete)
 
-      OpenAI::Client.delete(path: "/abc")
+      OpenAI::Client.new.delete(path: "/abc")
+    end
+  end
+
+  context "with a block" do
+    let(:client) do
+      OpenAI::Client.new do |client|
+        client.response :logger, ::Logger.new(STDOUT), bodies: true
+      end
+    end
+
+    it "sets the logger" do
+      connection = Faraday.new
+      client.faraday_config.call(connection)
+      expect(connection.builder.handlers).to include Faraday::Response::Logger
     end
   end
 end
