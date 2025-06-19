@@ -1,8 +1,8 @@
-require_relative "lib/openai/version"
+require_relative "lib/airops/openai/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "ruby-openai"
-  spec.version       = OpenAI::VERSION
+  spec.version       = Airops::OpenAI::VERSION
   spec.authors       = ["Alex"]
   spec.email         = ["alexrudall@users.noreply.github.com"]
 

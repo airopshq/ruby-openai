@@ -1,8 +1,8 @@
-RSpec.describe OpenAI::Client do
+RSpec.describe Airops::OpenAI::Client do
   describe "#images" do
     describe "#generate", :vcr do
       let(:response) do
-        OpenAI::Client.new.images.generate(
+        Airops::OpenAI::Client.new.images.generate(
           parameters: {
             prompt: prompt,
             size: size
@@ -23,7 +23,7 @@ RSpec.describe OpenAI::Client do
 
     describe "#edit", :vcr do
       let(:response) do
-        OpenAI::Client.new.images.edit(
+        Airops::OpenAI::Client.new.images.edit(
           parameters: {
             image: image,
             mask: mask,
@@ -50,7 +50,7 @@ RSpec.describe OpenAI::Client do
 
     describe "#variations", :vcr do
       let(:response) do
-        OpenAI::Client.new.images.variations(
+        Airops::OpenAI::Client.new.images.variations(
           parameters: {
             image: image,
             n: 2,

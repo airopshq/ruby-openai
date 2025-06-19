@@ -1,7 +1,7 @@
 require "bundler/setup"
 require "dotenv/load"
-require "openai"
-require "openai/compatibility"
+require "airops/openai"
+require "airops/openai/compatibility"
 require "vcr"
 
 Dir[File.expand_path("spec/support/**/*.rb")].sort.each { |f| require f }
@@ -13,8 +13,8 @@ VCR.configure do |c|
     record: ENV.fetch("OPENAI_ACCESS_TOKEN", nil) ? :all : :new_episodes,
     match_requests_on: [:method, :uri, VCRMultipartMatcher.new]
   }
-  c.filter_sensitive_data("<OPENAI_ACCESS_TOKEN>") { OpenAI.configuration.access_token }
-  c.filter_sensitive_data("<OPENAI_ORGANIZATION_ID>") { OpenAI.configuration.organization_id }
+  c.filter_sensitive_data("<OPENAI_ACCESS_TOKEN>") { Airops::OpenAI.configuration.access_token }
+  c.filter_sensitive_data("<OPENAI_ORGANIZATION_ID>") { Airops::OpenAI.configuration.organization_id }
 end
 
 RSpec.configure do |c|
@@ -39,7 +39,7 @@ OPENAI_ACCESS_TOKEN to just run against the stored VCR responses.".freeze
   end
 
   c.before(:all) do
-    OpenAI.configure do |config|
+    Airops::OpenAI.configure do |config|
       config.access_token = ENV.fetch("OPENAI_ACCESS_TOKEN", "dummy-token")
     end
   end

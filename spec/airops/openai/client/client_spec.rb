@@ -1,8 +1,8 @@
-RSpec.describe OpenAI::Client do
-  let(:default_timeout) { OpenAI::Configuration::DEFAULT_REQUEST_TIMEOUT }
+RSpec.describe Airops::OpenAI::Client do
+  let(:default_timeout) { Airops::OpenAI::Configuration::DEFAULT_REQUEST_TIMEOUT }
 
   it "can be initialized" do
-    expect { OpenAI::Client.new }.not_to raise_error
+    expect { Airops::OpenAI::Client.new }.not_to raise_error
   end
 
   describe ".get" do
@@ -12,7 +12,7 @@ RSpec.describe OpenAI::Client do
       ).and_call_original
       expect_any_instance_of(Faraday::Connection).to receive(:get)
 
-      OpenAI::Client.new.get(path: "/abc")
+      Airops::OpenAI::Client.new.get(path: "/abc")
     end
   end
 
@@ -23,7 +23,7 @@ RSpec.describe OpenAI::Client do
       ).and_call_original
       expect_any_instance_of(Faraday::Connection).to receive(:post)
 
-      OpenAI::Client.new.json_post(path: "/abc", parameters: { foo: :bar })
+      Airops::OpenAI::Client.new.json_post(path: "/abc", parameters: { foo: :bar })
     end
   end
 
@@ -34,7 +34,7 @@ RSpec.describe OpenAI::Client do
       ).and_call_original
       expect_any_instance_of(Faraday::Connection).to receive(:post)
 
-      OpenAI::Client.new.multipart_post(path: "/abc")
+      Airops::OpenAI::Client.new.multipart_post(path: "/abc")
     end
   end
 
@@ -45,13 +45,13 @@ RSpec.describe OpenAI::Client do
       ).and_call_original
       expect_any_instance_of(Faraday::Connection).to receive(:delete)
 
-      OpenAI::Client.new.delete(path: "/abc")
+      Airops::OpenAI::Client.new.delete(path: "/abc")
     end
   end
 
   context "with a block" do
     let(:client) do
-      OpenAI::Client.new do |client|
+      Airops::OpenAI::Client.new do |client|
         client.response :logger, ::Logger.new(STDOUT), bodies: true
       end
     end

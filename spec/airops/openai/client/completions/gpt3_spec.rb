@@ -1,11 +1,11 @@
-RSpec.describe OpenAI::Client do
+RSpec.describe Airops::OpenAI::Client do
   describe "#completions: GPT-3 models" do
     context "with a prompt and max_tokens", :vcr do
       let(:prompt) { "Once upon a time" }
       let(:max_tokens) { 5 }
 
       let(:response) do
-        OpenAI::Client.new.completions(
+        Airops::OpenAI::Client.new.completions(
           parameters: {
             model: model,
             prompt: prompt,

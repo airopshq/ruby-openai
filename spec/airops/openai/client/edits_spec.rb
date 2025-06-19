@@ -1,10 +1,10 @@
-RSpec.describe OpenAI::Client do
+RSpec.describe Airops::OpenAI::Client do
   describe "#edits", :vcr do
     let(:input) { "There are 7 days in a wek, and between 28 and 31 in a month." }
     let(:instruction) { "Fix the misspelled word 'week'" }
     let(:cassette) { "edits #{model} #{input}".downcase }
     let(:response) do
-      OpenAI::Client.new.edits(
+      Airops::OpenAI::Client.new.edits(
         parameters: {
           model: model,
           input: input,
