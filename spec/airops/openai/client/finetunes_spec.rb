@@ -1,17 +1,17 @@
-RSpec.describe OpenAI::Client do
+RSpec.describe Airops::OpenAI::Client do
   describe "#finetunes", :vcr do
     let(:filename) { "sentiment.jsonl" }
     let(:file) { File.join(RSPEC_ROOT, "fixtures/files", filename) }
     let!(:file_id) do
       response = VCR.use_cassette("finetunes files upload ") do
-        OpenAI::Client.new.files.upload(parameters: { file: file, purpose: "fine-tune" })
+        Airops::OpenAI::Client.new.files.upload(parameters: { file: file, purpose: "fine-tune" })
       end
       JSON.parse(response.body)["id"]
     end
     let(:model) { "ada" }
     let!(:create_response) do
       VCR.use_cassette("#{cassette} create") do
-        OpenAI::Client.new.finetunes.create(
+        Airops::OpenAI::Client.new.finetunes.create(
           parameters: {
             training_file: file_id,
             model: model
@@ -31,7 +31,7 @@ RSpec.describe OpenAI::Client do
 
     describe "#list" do
       let(:cassette) { "finetunes list" }
-      let(:response) { OpenAI::Client.new.finetunes.list }
+      let(:response) { Airops::OpenAI::Client.new.finetunes.list }
 
       it "succeeds" do
         VCR.use_cassette(cassette) do
@@ -43,7 +43,7 @@ RSpec.describe OpenAI::Client do
 
     describe "#retrieve" do
       let(:cassette) { "finetunes retrieve" }
-      let(:response) { OpenAI::Client.new.finetunes.retrieve(id: create_id) }
+      let(:response) { Airops::OpenAI::Client.new.finetunes.retrieve(id: create_id) }
 
       it "succeeds" do
         VCR.use_cassette(cassette) do
@@ -55,7 +55,7 @@ RSpec.describe OpenAI::Client do
 
     describe "#cancel" do
       let(:cassette) { "finetunes cancel" }
-      let(:response) { OpenAI::Client.new.finetunes.cancel(id: create_id) }
+      let(:response) { Airops::OpenAI::Client.new.finetunes.cancel(id: create_id) }
 
       it "succeeds" do
         VCR.use_cassette(cassette) do
@@ -68,7 +68,7 @@ RSpec.describe OpenAI::Client do
 
     describe "#events" do
       let(:cassette) { "finetunes events" }
-      let(:response) { OpenAI::Client.new.finetunes.events(id: create_id) }
+      let(:response) { Airops::OpenAI::Client.new.finetunes.events(id: create_id) }
 
       it "succeeds" do
         VCR.use_cassette(cassette) do
@@ -81,7 +81,7 @@ RSpec.describe OpenAI::Client do
     describe "#delete" do
       let(:cassette) { "finetunes delete" }
       let(:retrieve_cassette) { "#{cassette} retrieve" }
-      let(:response) { OpenAI::Client.new.finetunes.delete(fine_tuned_model: "abc") }
+      let(:response) { Airops::OpenAI::Client.new.finetunes.delete(fine_tuned_model: "abc") }
 
       # It takes too long to fine-tune a model so we can delete it when running the test suite
       # against the live API. Instead, we just check that the API returns an error.
@@ -95,7 +95,7 @@ RSpec.describe OpenAI::Client do
       context "when passing a fine-tune ID instead of the model name" do
         it "raises an error" do
           expect do
-            OpenAI::Client.new.finetunes.delete(fine_tuned_model: "ft-abc")
+            Airops::OpenAI::Client.new.finetunes.delete(fine_tuned_model: "ft-abc")
           end.to raise_error(ArgumentError)
         end
       end
@@ -106,7 +106,7 @@ RSpec.describe OpenAI::Client do
       let(:cassette) { "finetune completions #{prompt}".downcase }
       let(:model) { "ada:ft-user-jxm65ijkzc1qrfhc0ij8moic-2021-12-11-20-11-52" }
       let(:response) do
-        OpenAI::Client.new.completions(
+        Airops::OpenAI::Client.new.completions(
           parameters: {
             model: model,
             prompt: prompt

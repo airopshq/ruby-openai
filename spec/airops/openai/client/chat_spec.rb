@@ -1,11 +1,11 @@
-RSpec.describe OpenAI::Client do
+RSpec.describe Airops::OpenAI::Client do
   describe "#chat" do
     context "with messages", :vcr do
       let(:messages) { [{ role: "user", content: "Hello!" }] }
       let(:stream) { false }
       let(:on_data) { nil }
       let(:response) do
-        OpenAI::Client.new.chat(
+        Airops::OpenAI::Client.new.chat(
           parameters: {
             model: model,
             messages: messages,

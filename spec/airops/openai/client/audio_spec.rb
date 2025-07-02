@@ -1,11 +1,11 @@
-RSpec.describe OpenAI::Client do
+RSpec.describe Airops::OpenAI::Client do
   describe "#transcribe" do
     context "with audio", :vcr do
       let(:filename) { "audio_sample.mp3" }
       let(:audio) { File.join(RSPEC_ROOT, "fixtures/files", filename) }
 
       let(:response) do
-        OpenAI::Client.new.transcribe(
+        Airops::OpenAI::Client.new.transcribe(
           parameters: {
             model: model,
             file: File.open(audio, "rb")
@@ -33,7 +33,7 @@ RSpec.describe OpenAI::Client do
       let(:audio) { File.join(RSPEC_ROOT, "fixtures/files", filename) }
 
       let(:response) do
-        OpenAI::Client.new.translate(
+        Airops::OpenAI::Client.new.translate(
           parameters: {
             model: model,
             file: File.open(audio, "rb")

@@ -1,9 +1,9 @@
-RSpec.describe OpenAI::Client do
+RSpec.describe Airops::OpenAI::Client do
   describe "#moderations", :vcr do
     let(:input) { "I'm worried about that." }
     let(:cassette) { "moderations #{input}".downcase }
     let(:response) do
-      OpenAI::Client.new.moderations(
+      Airops::OpenAI::Client.new.moderations(
         parameters: {
           input: input
         }

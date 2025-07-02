@@ -1,7 +1,7 @@
-RSpec.describe OpenAI::Client do
+RSpec.describe Airops::OpenAI::Client do
   describe "#models" do
     describe "#list", :vcr do
-      let(:response) { OpenAI::Client.new.models.list }
+      let(:response) { Airops::OpenAI::Client.new.models.list }
       let(:cassette) { "models list" }
 
       it "succeeds" do
@@ -14,7 +14,7 @@ RSpec.describe OpenAI::Client do
 
     describe "#retrieve" do
       let(:cassette) { "models retrieve" }
-      let(:response) { OpenAI::Client.new.models.retrieve(id: "text-ada-001") }
+      let(:response) { Airops::OpenAI::Client.new.models.retrieve(id: "text-ada-001") }
 
       it "succeeds" do
         VCR.use_cassette(cassette) do
